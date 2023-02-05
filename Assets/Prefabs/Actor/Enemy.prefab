@@ -309,7 +309,7 @@ MonoBehaviour:
   redirectionLayer:
     serializedVersion: 2
     m_Bits: 2048
-  freezeDebuffResistance: 3
+  freezeDebuffResistance: 2
   freezeDebufDuration: 3
   parentNormalVisual: {fileID: 1086807121657049246}
   parentFreezeVisual: {fileID: 1516076579411104057}

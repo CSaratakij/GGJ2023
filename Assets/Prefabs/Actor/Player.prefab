@@ -273,10 +273,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1280
   meleeCooldown: 1
-  shootCooldown: 1
+  shootCooldown: 0.15
   bulletPoolSize: 60
   bulletPrefab: {fileID: 3734464551060841934, guid: ed4a2ec1d595a0c42affe60017093e6e, type: 3}
   muzzleOrigin: {fileID: 5397118561588691394}
+  muzzleFlash: {fileID: 0}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -329,7 +330,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3169271509367576356
 Transform:
   m_ObjectHideFlags: 0

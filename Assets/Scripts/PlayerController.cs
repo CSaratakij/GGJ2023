@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int bulletPoolSize = 30;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform muzzleOrigin;
+    [SerializeField] private Transform muzzleFlash;
     [SerializeField] private LayerMask enemyLayer;
 
     [Header("Visual")]
@@ -50,6 +51,7 @@ public class PlayerController : MonoBehaviour
     private bool isFacingRight = true;
     private float dashTimer;
     private float dashCooldownTimer;
+    private float shootTimer;
 
     private GameObject[] bulletPools;
 
@@ -157,25 +159,34 @@ public class PlayerController : MonoBehaviour
         // Shoot
         if (isPressedShoot)
         {
-            for (int i = 0; i < bulletPools.Length; ++i)
+            bool canShoot = (Time.time > shootTimer);
+
+            if (canShoot)
             {
-                var isBusy = bulletPools[i].activeSelf;
+                shootTimer = (Time.time + shootCooldown);
 
-                if (isBusy)
+                for (int i = 0; i < bulletPools.Length; ++i)
                 {
-                    continue;
+                    var isBusy = bulletPools[i].activeSelf;
+
+                    if (isBusy)
+                    {
+                        continue;
+                    }
+
+                    var facing = (transform.localScale.x > 0.0f) ? 0.4f : -0.4f;
+
+                    var newLocalScale = (Vector2.one * 0.4f);
+                    newLocalScale.x = facing;
+
+                    bulletPools[i].transform.position = muzzleOrigin.transform.position;
+                    bulletPools[i].transform.localScale = newLocalScale;
+                    bulletPools[i].gameObject.SetActive(true);
+                    break;
                 }
-
-                var facing = (transform.localScale.x > 0.0f) ? 0.4f : -0.4f;
-
-                var newLocalScale = (Vector2.one * 0.4f);
-                newLocalScale.x = facing;
-
-                bulletPools[i].transform.position = muzzleOrigin.transform.position;
-                bulletPools[i].transform.localScale = newLocalScale;
-                bulletPools[i].gameObject.SetActive(true);
-                break;
             }
+
+            isPressedShoot = false;
         }
 
         // Melee

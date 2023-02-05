@@ -13,7 +13,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1086807121829672148, guid: 1a51cf511a881314096f5014386d5aae, type: 3}
       propertyPath: moveSpeed
-      value: 10
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1086807121829672148, guid: 1a51cf511a881314096f5014386d5aae, type: 3}
+      propertyPath: freezeDebuffResistance
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1086807121829672152, guid: 1a51cf511a881314096f5014386d5aae, type: 3}
       propertyPath: m_Name
