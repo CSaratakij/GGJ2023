@@ -740,7 +740,14 @@ MonoBehaviour:
   lblScoreGameOver: {fileID: 1059440034}
   panelInGame: {fileID: 516479305}
   panelGameOver: {fileID: 197435538}
-  sfxLists: []
+  sfxLists:
+  - {fileID: 8300000, guid: a31252416cc8bc44f9c55916a4767e10, type: 3}
+  - {fileID: 8300000, guid: f459b4575edc119478f9e71c46e1bce6, type: 3}
+  - {fileID: 8300000, guid: 7f473adad73819c4fa70f302c8dd35e9, type: 3}
+  - {fileID: 8300000, guid: 7f473adad73819c4fa70f302c8dd35e9, type: 3}
+  - {fileID: 8300000, guid: fcecfdba1e2854145ab26b810101c913, type: 3}
+  - {fileID: 8300000, guid: 9b7c41eb82cb02d4196689cd5540e42f, type: 3}
+  - {fileID: 8300000, guid: 9b7c41eb82cb02d4196689cd5540e42f, type: 3}
 --- !u!4 &316287518
 Transform:
   m_ObjectHideFlags: 0

@@ -124,6 +124,7 @@ public class GameMode : MonoBehaviour
         lblScoreGameOver.text = string.Format(gameOverMessageFormat, score);
         panelInGame.alpha = 0.0f;
         panelGameOver.alpha = 1.0f;
+        GameMode.EmitAudio(GameMode.SFX.Dead);
     }
 
     public void SetScore(int value)
@@ -136,12 +137,6 @@ public class GameMode : MonoBehaviour
     {
         if (sfxLists == null)
         {
-            return;
-        }
-
-        if (sfxLists.Length != (int)SFX.Total)
-        {
-            Debug.LogError("Need to update sfx list...");
             return;
         }
 
@@ -187,11 +182,11 @@ public class GameMode : MonoBehaviour
         SceneManager.LoadScene(currentScene.buildIndex);
     }
 
-    public static void EmitAudio(SFX sfx)
+    public static void EmitAudio(SFX sfx, float volume = 1.0f)
     {
         if (Instance)
         {
-            Instance.PlayAudio(sfx);
+            Instance.PlayAudio(sfx, volume);
         }
     }
 }

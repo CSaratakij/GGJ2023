@@ -121,6 +121,7 @@ public class PlayerController : MonoBehaviour
             isJump = true;
             isPressedJump = false;
             rigid.velocity = new Vector2(rigid.velocity.x, jumpSpeed);
+            GameMode.EmitAudio(GameMode.SFX.Jump, 0.25f);
         }
 
         // Dash
@@ -153,6 +154,7 @@ public class PlayerController : MonoBehaviour
                 dashCooldownTimer = (dashTimer + dashCooldown);
 
                 rigid.velocity = new Vector2(dashSpeed, rigid.velocity.y);
+                GameMode.EmitAudio(GameMode.SFX.Dash);
             }
         }
 
@@ -184,6 +186,8 @@ public class PlayerController : MonoBehaviour
                     bulletPools[i].gameObject.SetActive(true);
                     break;
                 }
+
+                GameMode.EmitAudio(GameMode.SFX.Shoot);
             }
 
             isPressedShoot = false;

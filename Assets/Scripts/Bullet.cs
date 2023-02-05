@@ -23,8 +23,7 @@ public class Bullet : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collider)
     {
         Debug.Log($"Collide with : {collider.gameObject.tag}");
-        GameMode.EmitAudio(GameMode.SFX.BulletHit);
-
+        //GameMode.EmitAudio(GameMode.SFX.BulletHit);
         gameObject.SetActive(false);
     }
 }
