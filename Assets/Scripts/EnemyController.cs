@@ -32,6 +32,8 @@ public class EnemyController : MonoBehaviour
     private int currentFreezeDebuffResistance = 0;
     private bool isAlive = true;
     private bool isDebuffStateChange = false;
+    private bool isStartDebuff = false;
+    private float debuffCountdown;
     private Debuff previousDebuffState;
     private Debuff debuffState;
     private Rigidbody2D rigid;
@@ -55,10 +57,9 @@ public class EnemyController : MonoBehaviour
     private void OnEnable()
     {
         isAlive = true;
-
-        //currentMoveDirection = (isFacingRight) ? Vector2.right : Vector2.left;
+        isStartDebuff = false;
+        debuffCountdown = 0.0f;
         currentFreezeDebuffResistance = freezeDebuffResistance;
-
         SetFacing(isFacingRight);
         UpdateGameObjectState(debuffState);
     }
@@ -81,12 +82,15 @@ public class EnemyController : MonoBehaviour
 
     private void LateUpdate()
     {
-#if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.H))
+        bool shouldClearDebuff = isAlive && isStartDebuff && (Time.time > debuffCountdown);
+
+        if (shouldClearDebuff)
         {
-            TakeFreezeDebuff();
+            isStartDebuff = false;
+            debuffState = Debuff.None;
+            currentFreezeDebuffResistance = freezeDebuffResistance;
+            UpdateGameObjectState(Debuff.None);
         }
-#endif
     }
 
     private void FixedUpdate()
@@ -152,6 +156,11 @@ public class EnemyController : MonoBehaviour
 
     public void TakeFreezeDebuff(int amount = 1)
     {
+        if (isStartDebuff)
+        {
+            return;
+        }
+
         int totalResistance = (currentFreezeDebuffResistance - amount);
         totalResistance = Mathf.Clamp(totalResistance, 0, freezeDebuffResistance);
 
@@ -167,6 +176,12 @@ public class EnemyController : MonoBehaviour
         }
 
         UpdateGameObjectState(debuffState);
+
+        if (shouldApplyFreezeDebuff)
+        {
+            isStartDebuff = true;
+            debuffCountdown = (Time.time + freezeDebufDuration);
+        }
     }
 
     public void Dead()
