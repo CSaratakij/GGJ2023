@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashSpeed = 10.0f;
     [SerializeField] private float dashDuration = 0.5f;
     [SerializeField] private float dashCooldown = 1.0f;
+    [SerializeField] private float fallingSpeed = 10.0f;
     [SerializeField] private float gravity = -10.0f;
     [SerializeField] private float gravityMultipilerWhenJump = 0.5f;
     [SerializeField] private float gravityMultipilerWhenFalling = 1.0f;
@@ -25,9 +26,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float shootCooldown = 1.0f;
     [SerializeField] private int bulletPoolSize = 30;
     [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Transform muzzleOrigin;
     [SerializeField] private LayerMask enemyLayer;
 
-    [Header("Animation")]
+    [Header("Visual")]
+    [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Animator anim;
 
     private Vector2 inputDirection;
@@ -152,6 +155,28 @@ public class PlayerController : MonoBehaviour
         }
 
         // Shoot
+        if (isPressedShoot)
+        {
+            for (int i = 0; i < bulletPools.Length; ++i)
+            {
+                var isBusy = bulletPools[i].activeSelf;
+
+                if (isBusy)
+                {
+                    continue;
+                }
+
+                var facing = (transform.localScale.x > 0.0f) ? 0.4f : -0.4f;
+
+                var newLocalScale = (Vector2.one * 0.4f);
+                newLocalScale.x = facing;
+
+                bulletPools[i].transform.position = muzzleOrigin.transform.position;
+                bulletPools[i].transform.localScale = newLocalScale;
+                bulletPools[i].gameObject.SetActive(true);
+                break;
+            }
+        }
 
         // Melee
 
@@ -187,7 +212,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!isAlive)
         {
-            rigid.velocity = Vector2.zero;
+            rigid.velocity = (Vector2.down * fallingSpeed);
             return;
         }
 
@@ -259,6 +284,7 @@ public class PlayerController : MonoBehaviour
     {
         isAlive = false;
         capsuleCollider2D.enabled = false;
+        spriteRenderer.flipY = true;
         GameMode.ForceGameOver();
     }
 }

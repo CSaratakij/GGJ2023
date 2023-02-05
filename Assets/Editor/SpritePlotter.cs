@@ -94,12 +94,12 @@ namespace GameTools
             }
 
             Tools.current = Tool.None;
-            SceneView.onSceneGUIDelegate += OnSceneGUI;
+            SceneView.duringSceneGui += OnSceneGUI;
         }
 
         private void OnDestroy()
         {
-            SceneView.onSceneGUIDelegate -= OnSceneGUI;
+            SceneView.duringSceneGui -= OnSceneGUI;
         }
 
         private void OnSceneGUI(SceneView sceneView)

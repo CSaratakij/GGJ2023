@@ -36,20 +36,54 @@ public class GameMode : MonoBehaviour
     }
 
     [Header("UI")]
-    [SerializeField] TextMeshProUGUI lblScore;
-    [SerializeField] TextMeshProUGUI lblScoreGameOver;
-    [SerializeField] CanvasGroup panelInGame;
-    [SerializeField] CanvasGroup panelGameOver;
+    [SerializeField] private TextMeshProUGUI lblScore;
+    [SerializeField] private TextMeshProUGUI lblScoreGameOver;
+    [SerializeField] private CanvasGroup panelInGame;
+    [SerializeField] private CanvasGroup panelGameOver;
+
+    [Header("Sound")]
+    /*
+    [SerializeField] private AudioClip sfxJump;
+    [SerializeField] private AudioClip sfxShoot;
+    [SerializeField] private AudioClip sfxBulletHit;
+    [SerializeField] private AudioClip sfxMelee;
+    [SerializeField] private AudioClip sfxDash;
+    [SerializeField] private AudioClip sfxDead;
+    [SerializeField] private AudioClip sfxEnemyDead;
+    */
+    [SerializeField] private AudioClip[] sfxLists;
+
+    public enum SFX
+    {
+        Jump,
+        Shoot,
+        BulletHit,
+        Melee,
+        Dash,
+        Dead,
+        EnemyDead,
+        Total = 8
+    }
 
     private int score = 0;
     private bool isGameOver = false;
     private string gameOverMessageFormat;
+    private AudioSource[] audioSources;
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+        }
+
+        audioSources = new AudioSource[30];
+
+        for (int i = 0; i < audioSources.Length; ++i)
+        {
+            var source = gameObject.AddComponent<AudioSource>();
+            source.playOnAwake = false;
+            audioSources[i] = source;
         }
 
         GameStart();
@@ -98,6 +132,38 @@ public class GameMode : MonoBehaviour
         lblScore.text = string.Format("{0}", score);
     }
 
+    public void PlayAudio(SFX sfx, float volume = 1.0f)
+    {
+        if (sfxLists == null)
+        {
+            return;
+        }
+
+        if (sfxLists.Length != (int)SFX.Total)
+        {
+            Debug.LogError("Need to update sfx list...");
+            return;
+        }
+
+        var clip = sfxLists[(int)sfx];
+        PlayAudio(clip, volume);
+    }
+
+    public void PlayAudio(AudioClip audioClip, float volume = 1.0f)
+    {
+        for (int i = 0; i < audioSources.Length; ++i)
+        {
+            var isBusy = audioSources[i].isPlaying;
+
+            if (isBusy)
+            {
+                continue;
+            }
+
+            audioSources[i].PlayOneShot(audioClip, volume);
+        }
+    }
+
     public static void IncreaseScore(int total = 1)
     {
         if (Instance)
@@ -119,6 +185,14 @@ public class GameMode : MonoBehaviour
     {
         var currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.buildIndex);
+    }
+
+    public static void EmitAudio(SFX sfx)
+    {
+        if (Instance)
+        {
+            Instance.PlayAudio(sfx);
+        }
     }
 }
 
